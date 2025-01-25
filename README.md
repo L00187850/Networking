@@ -44,7 +44,7 @@ The first drawing is a detailed network infrastructure diagram for a service sta
 
 ### Detailed Floor Plan of Supermarket
 
-The second drawing is a detailed floor plan of a building, showing the layout of the supermarket rooms and the distribution of network and power infrastructure. This includes the locations of different types of distributor racks (Campus, Floor and Building), seating arrangements, power sockets, network points, and other equipment such as cable trays, wireless access points, and security cameras. There is also includes a legend explaining the symbols used in the plans.
+The second drawing is a detailed floor plan of a supermarket, showing the layout of the supermarket rooms and the distribution of network and power infrastructure. This includes the locations of different types of distributor racks (Campus, Floor and Building), seating arrangements, power sockets, network points, and other equipment such as cable trays, wireless access points, and security cameras. There is also includes a legend explaining the symbols used in the plans.
 
 ### Features in the supermarket map.
 
