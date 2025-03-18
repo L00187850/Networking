@@ -1,0 +1,168 @@
+DIFFs 
+
+##############IPSEC VPNS (Note that this was configured in the GUI interface of each firewall. Proof of VPNS working are shown in a screenshot found in this project)######################################################
+Create a vpn tunnel from headoffice to balbriggan
+    edit "to_Balbriggan"
+        set vdom "root"
+        set type tunnel
+        set snmp-index 13
+        set interface "port10"
+    next
+end
+
+Create a VPN tunnel from headoffice to Datacentre1
+    edit "To_Datacentre1"
+        set vdom "root"
+        set type tunnel
+        set snmp-index 14
+        set interface "port10"
+    next
+end
+
+Create a VPN tunnel from headoffice to Datacentre2
+    edit "To_Datacentre2"
+        set vdom "root"
+        set type tunnel
+        set snmp-index 15
+        set interface "port10"
+    next
+end
+
+It is essentially the same configuration between each site except for the naming scheme and the snmp index.
+
+Below is an example of the configuration between the headoffice and each site for the phase 2 section of the IPsec vpn.
+config vpn ipsec phase2-interface
+    edit "to_Balbriggan"
+        set phase1name "to_Balbriggan"
+        set proposal des-sha256
+        set src-subnet 172.16.10.0 255.255.255.0
+        set dst-subnet 172.16.40.0 255.255.255.0
+    next
+    edit "To_Datacentre1"
+        set phase1name "To_Datacentre1"
+        set proposal des-md5 des-sha1
+        set comments "VPN: To_Datacentre1 (Created by VPN wizard)"
+        set src-addr-type name
+        set dst-addr-type name
+        set src-name "To_Datacentre1_local"
+        set dst-name "To_Datacentre1_remote"
+    next
+    edit "To_Datacentre2"
+        set phase1name "To_Datacentre2"
+        set proposal des-md5 des-sha1
+        set comments "VPN: To_Datacentre2 (Created by VPN wizard)"
+        set src-addr-type name
+        set dst-addr-type name
+        set src-name "To_Datacentre2_local"
+        set dst-name "To_Datacentre2_remote"
+    next
+end
+
+
+######################Port configurations############################################
+Set Port1 and port10 on each firewall to dhcp and allow ping, ssh, http and https access
+    edit "port1"
+        set vdom "root"
+        set mode dhcp
+        set allowaccess ping https ssh http
+        set type physical
+        set snmp-index 1
+    next
+
+Port1 is configured to allow access using the internal adapter for the physical host device.
+
+    edit "port10"
+        set vdom "root"
+        set mode dhcp
+        set allowaccess ping https ssh http
+        set type physical
+        set snmp-index 10
+    next
+
+Port10 connects to the "Internet" switch via dhcp.
+
+for datacentre1 port 2 is configured like this. Note that this was configured through the GUI and DHCP is running on the firewall.
+    edit "port2"
+        set vdom "root"
+        set ip 10.2.0.1 255.255.0.0
+        set allowaccess ping https ssh http
+        set type physical
+        set alias "Datacentre1 LAN"
+        set snmp-index 2
+    next
+
+Here is the port2 configuration for Balbriggan. Note that this was configured through the GUI and DHCP is running on the firewall.
+    edit "port2"
+        set vdom "root"
+        set ip 10.32.0.1 255.255.0.0
+        set allowaccess ping https ssh http
+        set type physical
+        set alias "Port2"
+        set snmp-index 2
+    next
+
+
+##########################OSPF#####################################
+OSPF is configured on each firewall.
+
+#Head Office Firewall OSPF
+config router ospf
+set router-id 172.16.10.2
+config area
+edit "0.0.0.0"
+set shortcut disable 
+next
+end
+config network
+edit 1
+set prefix 172.16.10.0 255.255.255.0
+set area 0.0.0.0
+next
+end
+
+
+#DataCentre1
+config router ospf
+set router-id 172.16.20.2  
+config area
+edit "0.0.0.0"  
+set shortcut disable  
+next
+end
+config network
+edit 1
+set prefix 172.16.20.0 255.255.255.0
+set area 0.0.0.0  
+next
+end
+
+
+#DataCentre2
+config router ospf
+set router-id 172.16.30.2  
+config area
+edit "0.0.0.0"  
+set shortcut disable  
+next
+end
+config network
+edit 1
+set prefix 172.16.30.0 255.255.255.0
+set area 0.0.0.0 
+next
+end
+
+#balbriggan
+config router ospf
+set router-id 172.16.40.2  
+config area
+edit "0.0.0.0"  
+set shortcut disable  
+next
+end
+config network
+edit 1
+set prefix 172.16.40.0 255.255.255.0
+set area 0.0.0.0  
+next
+end

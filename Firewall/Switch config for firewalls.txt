@@ -1,0 +1,187 @@
+hostname Internet
+
+ip dhcp excluded-address 172.16.0.1
+ip dhcp excluded-address 172.16.0.2
+ip dhcp excluded-address 172.16.0.3
+ip dhcp excluded-address 172.16.0.4
+ip dhcp excluded-address 172.16.10.1
+ip dhcp excluded-address 172.16.20.1
+ip dhcp excluded-address 172.16.30.1
+ip dhcp excluded-address 172.16.40.1
+
+vlan 10
+name HeadOffice
+
+vlan 20
+name Datacentre1
+
+vlan 30
+name Datacentre2
+
+vlan 40
+name Balbriggan
+
+ip dhcp pool HeadOffice
+ network 172.16.10.0 255.255.255.0
+ default-router 172.16.10.1
+ dns-server 8.8.8.8
+
+
+ip dhcp pool DataCentre1
+ network 172.16.20.0 255.255.255.0
+ default-router 172.16.20.1
+ dns-server 8.8.8.8
+
+
+ip dhcp pool DataCentre2
+ network 172.16.30.0 255.255.255.0
+ default-router 172.16.30.1
+ dns-server 8.8.8.8
+
+
+ip dhcp pool Balbriggan
+ network 172.16.40.0 255.255.255.0
+ default-router 172.16.40.1
+ dns-server 8.8.8.8
+
+
+ip cef
+no ipv6 cef
+
+spanning-tree mode pvst
+spanning-tree extend system-id
+
+interface GigabitEthernet0/0
+ switchport access vlan 20
+ switchport trunk allowed vlan 10,20,30,40
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport mode access
+ negotiation auto
+
+
+interface GigabitEthernet0/1
+ switchport access vlan 10
+ switchport trunk allowed vlan 10,20,30,40
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport mode access
+ negotiation auto
+
+
+interface GigabitEthernet0/2
+ switchport access vlan 40
+ switchport trunk allowed vlan 10,20,30,40
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport mode access
+ negotiation auto
+
+
+interface GigabitEthernet0/3
+ switchport access vlan 30
+ switchport trunk allowed vlan 10,20,30,40
+ switchport trunk encapsulation dot1q
+ switchport trunk native vlan 999
+ switchport mode access
+ negotiation auto
+
+interface GigabitEthernet1/0
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+ negotiation auto
+
+interface GigabitEthernet1/1
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+ negotiation auto
+
+
+interface GigabitEthernet1/2
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+ negotiation auto
+
+
+interface GigabitEthernet1/3
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+ negotiation auto
+
+interface GigabitEthernet2/0
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+ negotiation auto
+
+interface GigabitEthernet2/1
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+ negotiation auto
+
+interface GigabitEthernet2/2
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+ negotiation auto
+
+interface GigabitEthernet2/3
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+ negotiation auto
+
+interface GigabitEthernet3/0
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+ negotiation auto
+
+interface GigabitEthernet3/1
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+ negotiation auto
+
+interface GigabitEthernet3/2
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+ negotiation auto
+
+interface GigabitEthernet3/3
+ switchport access vlan 1000
+ switchport mode access
+ shutdown
+ negotiation auto
+
+interface Vlan10
+ ip address 172.16.10.1 255.255.255.0
+
+interface Vlan20
+ ip address 172.16.20.1 255.255.255.0
+
+interface Vlan30
+ ip address 172.16.30.1 255.255.255.0
+
+interface Vlan40
+ ip address 172.16.40.1 255.255.255.0
+
+router ospf 1
+ network 172.16.10.0 0.0.0.255 area 0
+ network 172.16.20.0 0.0.0.255 area 0
+ network 172.16.30.0 0.0.0.255 area 0
+ network 172.16.40.0 0.0.0.255 area 0
+
+line con 0
+line aux 0
+line vty 0 15
+ login
+
+end
+
